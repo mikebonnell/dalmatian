@@ -1,4 +1,4 @@
-(ns dalmatian.core)
+(ns dalmatian)
 
 (defn foo
   "I don't do a whole lot."
