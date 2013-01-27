@@ -36,8 +36,9 @@
 
 (defn hipchat-callback
   [_ tweet]
-  (prn tweet))
-  ;(hipchat/message *hipchat-auth-token* {:room_id *hipchat-room-id* :message (build-perma-url tweet)}))
+  (let [permaurl (build-perma-url tweet)]
+    (println "Hipchat: sending link " permaurl)
+    (hipchat/message *hipchat-auth-token* {:room_id *hipchat-room-id* :message permaurl})))
 
 (def ^:dynamic *callback-agent* (agent {} :error-mode :continue))
 
@@ -72,7 +73,7 @@
 
 (defn run!
   [track]
-  (streaming/statuses-filter :oauth-creds creds :callbacks async-streaming-callback :track track))
+  (streaming/statuses-filter :oauth-creds creds :callbacks async-streaming-callback :params {:track track}))
 
 (defn -main
   [& _]
