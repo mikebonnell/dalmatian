@@ -45,6 +45,10 @@
     on-failure
     on-exception))
 
+(defn run!
+  [track]
+  (streaming/statuses-filter :oauth-creds creds :callbacks async-streaming-callback :track track))
+
 (defn -main
   [& args]
   )
