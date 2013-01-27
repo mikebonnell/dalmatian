@@ -36,7 +36,8 @@
 
 (defn hipchat-callback
   [_ tweet]
-  (hipchat/message *hipchat-auth-token* {:room_id *hipchat-room-id* :message (build-perma-url tweet)}))
+  (prn tweet))
+  ;(hipchat/message *hipchat-auth-token* {:room_id *hipchat-room-id* :message (build-perma-url tweet)}))
 
 (def ^:dynamic *callback-agent* (agent {} :error-mode :continue))
 
