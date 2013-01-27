@@ -7,4 +7,5 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [twitter-api "0.6.10"]
-                 [cheshire "4.0.2"]])
+                 [cheshire "4.0.2"]
+                 [clipchat "1.0.0-SNAPSHOT"]])
