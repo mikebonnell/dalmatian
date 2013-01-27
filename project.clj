@@ -6,6 +6,6 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.4.0"]
-                 [twitter-api "0.6.10"]
-                 [cheshire "4.0.2"]
+                 [twitter-api "0.7.1"]
+                 [cheshire "5.0.1"]
                  [clipchat "1.0.0-SNAPSHOT"]])
