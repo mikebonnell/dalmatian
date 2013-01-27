@@ -1,7 +1,8 @@
 (ns dalmatian
   (:require [twitter.oauth :as oauth]
             [twitter.api.streaming :as streaming]
-            [cheshire.core :as json])
+            [cheshire.core :as json]
+            [clipchat.rooms :as hipchat])
   (:import (twitter.callbacks.protocols AsyncStreamingCallback)))
 
 (defn die!
@@ -19,9 +20,16 @@
              (env "USER_ACCESS_TOKEN")
              (env "USER_ACCESS_TOKEN_SECRET")))
 
-(def ^:dyanmic *callback-agent* (agent {} :error-mode :continue))
+(def ^:dynamic *hipchat-room-id* (env "HIPCHAT_ROOM_ID"))
+(def ^:dynamic *hipchat-auth-token* (env "HIPCHAT_AUTH_TOKEN"))
 
-(def ^:dynamic *callbacks* [])
+(defn hipchat-callback
+  [_ tweet]
+  (hipchat/message *hipchat-auth-token* {:room_id *hipchat-room-id* :message (:id_str tweet)}))
+
+(def ^:dynamic *callback-agent* (agent {} :error-mode :continue))
+
+(def ^:dynamic *callbacks* [hipchat-callback])
 
 (defn on-bodypart
   "Called when a new message is received from the streaming api"
