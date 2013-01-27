@@ -25,9 +25,18 @@
 (def ^:dynamic *hipchat-room-id* (env "HIPCHAT_ROOM_ID"))
 (def ^:dynamic *hipchat-auth-token* (env "HIPCHAT_AUTH_TOKEN"))
 
+(defn get-poster-handle-from-tweet
+  [tweet]
+  (get-in tweet [:user :screen_name]))
+
+(defn build-perma-url
+  [tweet]
+    (when-let [handle (get-poster-handle-from-tweet tweet)]
+      (str "https://twitter.com/" handle "/status" (:id_str tweet))))
+
 (defn hipchat-callback
   [_ tweet]
-  (hipchat/message *hipchat-auth-token* {:room_id *hipchat-room-id* :message (:id_str tweet)}))
+  (hipchat/message *hipchat-auth-token* {:room_id *hipchat-room-id* :message (build-perma-url tweet)}))
 
 (def ^:dynamic *callback-agent* (agent {} :error-mode :continue))
 
