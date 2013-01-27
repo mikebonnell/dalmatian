@@ -19,11 +19,15 @@
              (env "USER_ACCESS_TOKEN")
              (env "USER_ACCESS_TOKEN_SECRET")))
 
+(def ^:dyanmic *callback-agent* (agent {} :error-mode :continue))
+
+(def ^:dynamic *callbacks* [])
+
 (defn on-bodypart
   "Called when a new message is received from the streaming api"
   [response baos]
   (let [tweet (json/parse-string (.toString baos) true)]
-    tweet))
+    (map #(send-off *callback-agent* % tweet) *callbacks*)))
 
 (defn on-failure
   "Called when the streaming api returns a 4xx response.
