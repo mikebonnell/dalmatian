@@ -74,5 +74,9 @@
   (streaming/statuses-filter :oauth-creds creds :callbacks async-streaming-callback :track track))
 
 (defn -main
-  [& args]
-  )
+  [& _]
+  (if-let [track (env "TRACK")]
+    (run! track)
+    (do
+      (println "FATAL: nothing defined for env var TRACK")
+      (die! 3))))
