@@ -20,6 +20,8 @@
              (env "USER_ACCESS_TOKEN")
              (env "USER_ACCESS_TOKEN_SECRET")))
 
+(def message-is-tweet? :user)
+
 (def ^:dynamic *hipchat-room-id* (env "HIPCHAT_ROOM_ID"))
 (def ^:dynamic *hipchat-auth-token* (env "HIPCHAT_AUTH_TOKEN"))
 
@@ -35,7 +37,8 @@
   "Called when a new message is received from the streaming api"
   [response baos]
   (let [tweet (json/parse-string (.toString baos) true)]
-    (map #(send-off *callback-agent* % tweet) *callbacks*)))
+    (when (message-is-tweet? tweet)
+      (map #(send-off *callback-agent* % tweet) *callbacks*))))
 
 (defn on-failure
   "Called when the streaming api returns a 4xx response.
