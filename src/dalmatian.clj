@@ -31,16 +31,14 @@
 
 (defn build-perma-url
   [tweet]
-    (when-let [handle (get-poster-handle-from-tweet tweet)]
-      (str "https://twitter.com/" handle "/status" (:id_str tweet))))
+  (when-let [handle (get-poster-handle-from-tweet tweet)]
+    (str "https://twitter.com/" handle "/status/" (:id_str tweet))))
 
 (defn hipchat-callback
-  [_ tweet]
+  [tweet]
   (let [permaurl (build-perma-url tweet)]
     (println "Hipchat: sending link " permaurl)
-    (hipchat/message *hipchat-auth-token* {:room_id *hipchat-room-id* :message permaurl})))
-
-(def ^:dynamic *callback-agent* (agent {} :error-mode :continue))
+    (hipchat/message *hipchat-auth-token* {:room_id *hipchat-room-id* :message permaurl :from "dalmatian"})))
 
 (def ^:dynamic *callbacks* [hipchat-callback])
 
@@ -49,7 +47,7 @@
   [response baos]
   (let [tweet (json/parse-string (.toString baos) true)]
     (when (message-is-tweet? tweet)
-      (map #(send-off *callback-agent* % tweet) *callbacks*))))
+      (map #(apply % tweet) *callbacks*))))
 
 (defn on-failure
   "Called when the streaming api returns a 4xx response.
