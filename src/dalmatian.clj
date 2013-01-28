@@ -32,7 +32,8 @@
 (defn build-perma-url
   [tweet]
   (when-let [handle (get-poster-handle-from-tweet tweet)]
-    (str "https://twitter.com/" handle "/status/" (:id_str tweet))))
+    (let [url (str "https://twitter.com/" handle "/status/" (:id_str tweet))]
+      (str "<a href=\"" url "\">" url "</a>"))))
 
 (defn hipchat-callback
   [tweet]
@@ -47,7 +48,7 @@
   [response baos]
   (let [tweet (json/parse-string (.toString baos) true)]
     (when (message-is-tweet? tweet)
-      (map #(apply % tweet) *callbacks*))))
+      (hipchat-callback tweet))))
 
 (defn on-failure
   "Called when the streaming api returns a 4xx response.
