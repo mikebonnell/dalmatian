@@ -11,8 +11,8 @@
 
 (defn env
   "Retrieve the value of var-name from the system environment, or nil"
-  [var-name]
-  (System/getenv var-name))
+  ([var-name] (env var-name nil))
+  ([var-name default] (or (System/getenv var-name) default)))
 
 (def creds (oauth/make-oauth-creds 
              (env "APP_CONSUMER_KEY")
