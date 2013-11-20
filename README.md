@@ -2,6 +2,9 @@
 
 A bot for pulling the Twitter Streaming API and pushing Tweets to other services.
 
+Right now only basic Hipchat functionality has been implemented.
+When a Tweet is received a link to it will be sent to the designated room.
+
 ## Usage
 
 The following environment variables must be set
